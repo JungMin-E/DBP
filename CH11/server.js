@@ -45,21 +45,6 @@ app.get('/enter', function (req, res) {
     res.sendFile(__dirname + '/enter.html');
 });
 
-/*
-app.post('/save', function (req, res) {
-    const { title, content, date } = req.body;
-    const sql = "INSERT INTO post (title, content, date) VALUES (?, ?, ?)";
-    conn.query(sql, [title, content, date], function (err, result) {
-        if (err) {
-            console.error('Error', err);
-            res.status(500).send("Error!");
-            return;
-        }
-        console.log("Data saved successfully:", result);
-        res.send("Data saved successfully!");
-    });
-});
-*/
 app.post('/save', function (req, res) {
   const { title, content, date } = req.body;
   const sql = "INSERT INTO post (title, content, date) VALUES (?, ?, ?)";
