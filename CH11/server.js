@@ -1,6 +1,19 @@
 const express = require('express');
-var mysql = require("mysql2");
+//var mysql = require("mysql2");
+const mongoclient = require('mongodb').MongoClient;
+var mydb;
+const url = 'mongodb+srv://ljm9990:1234@cluster0.1ip8q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+//const url = 'mongodb+srv://ljm9990:1234@cluster0.1ip8q.mongodb.net/';
+mongoclient.connect(url)
+    .then(client => {
+        console.log('몽고DB 접속 성공');
+        mydb = client.db('myboard');
+    })
+    .catch(err => {
+        console.error('몽고DB 접속 실패: ', err);
+    });
 
+/*
 var conn = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -14,12 +27,10 @@ conn.connect((err) => {
         return;
     }
 });
-
+*/
 const app = express();
-
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
@@ -57,4 +68,12 @@ app.post('/save', function (req, res) {
       console.log("Data saved successfully:", result);
       res.redirect('/list');
   });
+});
+
+app.post('/delete', (req, res) => {
+    console.log(req.body);
+    req.body._id = new ObjectId(req.body._id);
+    mydb.collection('post').deleteOne(req.body).then(result => {
+        console.log('삭제완료');
+    });
 });
