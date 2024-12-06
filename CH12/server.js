@@ -74,7 +74,7 @@ app.get('/list', (req, res) => {
             res.status(500).send("list 불어오기 오류!");
             return;
         }
-        console.log(results);
+        //console.log(results);
         res.render(__dirname + '/views/list.ejs', {data: results});
     });
 });
@@ -125,17 +125,17 @@ app.post('/delete', (req,res)=>{
 });
 */
 //mysql /delete
-app.set('/delete', (req, res) => {
-    const {id} = req.body; //클라이언트에게 id를 전달받음
+app.post('/delete', (req, res) => {
+    const { id } = req.body; //클라이언트에게 id를 전달받음
+    
     const sql = "DELETE FROM post WHERE id = ?";
 
-    conn.query(sql, id, (err, results) => {
+    conn.query(sql, [id], (err, results) => {
         if(err) {
             console.error('데이터 삭제 오류!', err);
             res.status(500).send('데이터 삭제중 오류 발생!');
             return;
         }
-        console.log('삭제된 데이터: ', results);
         res.send('삭제완료!');
     });
 });
